@@ -218,8 +218,10 @@ class Iar {
         iar.terminal.show();
 
         iar.terminal.appendLine('Building configuration: ' + iar.config);
+        
+        var task = os.cpus().length;
 
-        var args = [iar.project.split("\\").join("\\\\"), iar.config, '-log', 'all', '-parallel', '32'];
+        var args = [iar.project.split("\\").join("\\\\"), iar.config, '-log', 'all', '-parallel', task];
         var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
             stdio: ['ignore', 'pipe', 'ignore']
         });
