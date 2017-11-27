@@ -249,6 +249,10 @@ class Iar {
             if (iar.warnings >= 0)
                 iar.terminal.appendLine('Warning: ' + iar.warnings);
         })
+
+        out.on('error', function (data) {
+            iar.terminal.appendLine('Error while starting IarBuild.exe. Open it with IAR Ide to fix it.');
+        })
     }
 }
 
