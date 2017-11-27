@@ -64,6 +64,7 @@ class Iar {
         }
 
         if (fs.existsSync(tmpfile)) {
+            def.push("__absolute =");
             def.push("__arm =");
             def.push("__big_endian =");
             def.push("__fiq =");
@@ -75,8 +76,11 @@ class Iar {
             def.push("__no_init =");
             def.push("__noretrun =");
             def.push("__packed =");
+            def.push("__pcrel =");
             def.push("__ramfunc =");
             def.push("__root =");
+            def.push("__sbrel =");
+            def.push("__stackless =");
             def.push("__swi =");
             def.push("__task =");
             def.push("__thumb =");
