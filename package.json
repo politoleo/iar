@@ -1,0 +1,40 @@
+{
+    "name": "iar",
+    "displayName": "Iar",
+    "description": "IAR Embedded Workbench integration",
+    "version": "1.0.0",
+    "publisher": "Leonardo Polito",
+    "engines": {
+        "vscode": "^1.18.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:iar.build"
+    ],
+    "main": "./src/main",
+    "contributes": {
+        "commands": [
+            {
+                "command": "iar.build",
+                "title": "IAR: Build Project"
+            }
+        ],
+        "keybindings": [{
+            "command": "iar.build",
+            "key": "ctrl+shift+B",
+            "when": "!inDebugMode"
+        }]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "eslint": "^4.6.1",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
