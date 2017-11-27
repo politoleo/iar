@@ -64,6 +64,7 @@ class Iar {
         }
 
         if (fs.existsSync(tmpfile)) {
+            def.push("__packed =");
             def.push("__intrinsic =");
             def.push("__nounwind =");
             def.push("__noretrun =");
