@@ -23,7 +23,7 @@
         ],
         "keybindings": [{
             "command": "iar.build",
-            "key": "f7",
+            "key": "ctrl+shift+B",
             "when": "!inDebugMode"
         }]
     },
