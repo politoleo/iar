@@ -1,8 +1,8 @@
 {
 	"name": "iar",
-	"displayName": "Iar",
+	"displayName": "IAR Embedded Workbench",
 	"icon": "icon.png",
-	"description": "IAR Embedded Workbench integration",
+	"description": "Provide Intellisense and Build support for IAR Embedded Workbench IDE",
 	"version": "1.0.1",
 	"publisher": "politoleo",
 	"engines": {
