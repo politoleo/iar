@@ -13,6 +13,10 @@
     "activationEvents": [
         "onCommand:iar.build"
     ],
+    "repository": {
+		"type": "git",
+		"url": "https://github.com/politoleo/iar.git"
+	},
     "main": "./src/main",
     "contributes": {
         "commands": [
