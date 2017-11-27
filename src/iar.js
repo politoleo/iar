@@ -64,10 +64,23 @@ class Iar {
         }
 
         if (fs.existsSync(tmpfile)) {
-            def.push("__packed =");
+            def.push("__arm =");
+            def.push("__big_endian =");
+            def.push("__fiq =");
+            def.push("__interwork =");
             def.push("__intrinsic =");
-            def.push("__nounwind =");
+            def.push("__irq =");
+            def.push("__little_endian =");
+            def.push("__nested =");
+            def.push("__no_init =");
             def.push("__noretrun =");
+            def.push("__packed =");
+            def.push("__ramfunc =");
+            def.push("__root =");
+            def.push("__swi =");
+            def.push("__task =");
+            def.push("__thumb =");
+            def.push("__weak =");
             defs = fs.readFileSync(tmpfile).toString();
             var def_regex = new RegExp("^(#define\\s)([^\\s]+\\s)(.*)$", "gm");
             while (temp = def_regex.exec(defs)) {
