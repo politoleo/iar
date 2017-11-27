@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const ch = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 class Iar {
 
@@ -53,7 +54,7 @@ class Iar {
     build_database_single(cmd, inc, def) {
         var args = this.build_database_args(cmd);
         var defs;
-        var tmpfile = this.folder + "/.vscode/iar.tmp";
+        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2]);
         args.push(tmpfile);
         var spw = ch.spawnSync(this.path + "arm\\bin\\iccarm.exe", args);
         var temp;
@@ -64,8 +65,9 @@ class Iar {
         }
 
         if (fs.existsSync(tmpfile)) {
-            def.push("_Pragma(x) ="),
-            def.push("__nounwind ="),
+
+            def.push("_Pragma(x) =");
+            def.push("__nounwind =");
             def.push("__absolute =");
             def.push("__arm =");
             def.push("__big_endian =");
@@ -87,6 +89,7 @@ class Iar {
             def.push("__task =");
             def.push("__thumb =");
             def.push("__weak =");
+
             defs = fs.readFileSync(tmpfile).toString();
             var def_regex = new RegExp("^(#define\\s)([^\\s]+\\s)(.*)$", "gm");
             while (temp = def_regex.exec(defs)) {
@@ -216,51 +219,58 @@ class Iar {
 
         iar.terminal.appendLine('Building configuration: ' + iar.config);
 
-        var args = [iar.project.split("\\").join("\\\\"), iar.config, '-log', 'all'];
-        var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, { 
-            detached: true 
-            //stdio: [ 'ignore', 1, 2 ]
+        var args = [iar.project.split("\\").join("\\\\"), iar.config, '-log', 'all', '-parallel', '32'];
+        var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
+            stdio: ['ignore', 'pipe', 'ignore']
         });
-        out.unref(); 
 
         var build_output = '';
-
         out.stdout.on('data', function (data) {
-            var buffer = data.toString();
+            var buffer = data;
             var temp;
-            var regex = new RegExp("^iccarm.exe (.*\\.c) (.*)$", "gmi");
-            while (temp = regex.exec(buffer)) {
+            var asm_regex = new RegExp("^iasmarm.exe (.*\\.s) (.*)$", "gmi");
+            while (temp = asm_regex.exec(buffer)) {
                 iar.terminal.appendLine(path.basename(temp[1]));
             }
-            var regex = new RegExp("^iasmarm.exe (.*\\.s) (.*)$", "gmi");
-            while (temp = regex.exec(buffer)) {
+            var icc_regex = new RegExp("^iccarm.exe (.*\\.c) (.*)$", "gmi");
+            while (temp = icc_regex.exec(buffer)) {
                 iar.terminal.appendLine(path.basename(temp[1]));
+            }
+            var link_regex = new RegExp("^ilinkarm.exe.*\\.o.*$", "gmi");
+            if (temp = link_regex.exec(buffer)) {
+                iar.terminal.appendLine(' ');
+                iar.terminal.appendLine("Linking...");
             }
             build_output += buffer;
         });
 
         out.on('close', function (code) {
-            iar.parse_build_output(build_output);
 
-            if (iar.problems.length > 0) {
-                iar.terminal.appendLine(' ');
-                for (var i = 0, len = iar.problems.length; i < len; i++) {
-                    iar.terminal.appendLine(iar.problems[i][0]);
+            if (build_output) {
+                iar.parse_build_output(build_output);
+
+                if (iar.problems.length > 0) {
+                    iar.terminal.appendLine(' ');
+                    for (var i = 0, len = iar.problems.length; i < len; i++) {
+                        iar.terminal.appendLine(iar.problems[i][0]);
+                    }
+                }
+
+                if (iar.errors >= 0 || iar.warnings >= 0) {
+                    iar.terminal.appendLine(' ');
+                    iar.terminal.appendLine('Building database...');
+                    iar.build_database();
+                    iar.build_database_config();
+                    iar.terminal.appendLine(' ');
+
+                    iar.terminal.appendLine('Errors: ' + iar.errors);
+                    iar.terminal.appendLine('Warning: ' + iar.warnings);
                 }
             }
-
-            iar.terminal.appendLine(' ');
-            iar.terminal.appendLine('Building database...');
-            iar.build_database();
-            iar.build_database_config();
-            iar.terminal.appendLine(' ');
-
-            vscode.workspace.problems
-
-            if (iar.errors >= 0)
-                iar.terminal.appendLine('Errors: ' + iar.errors);
-            if (iar.warnings >= 0)
-                iar.terminal.appendLine('Warning: ' + iar.warnings);
+            else
+            {
+                iar.terminal.appendLine('Something went wrong...');
+            }
         })
 
         out.on('error', function (data) {

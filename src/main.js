@@ -5,9 +5,9 @@ const Iar = require('./iar');
 var iar = undefined;
 var folder = undefined;
 
-function resolve(string){
-    var out =  string.split("${workspaceRoot}").join(folder);
-    out =  out.split("${workspaceFolder}").join(folder);
+function resolve(string) {
+    var out = string.split("${workspaceRoot}").join(folder);
+    out = out.split("${workspaceFolder}").join(folder);
     return out;
 }
 

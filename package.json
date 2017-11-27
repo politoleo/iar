@@ -21,11 +21,24 @@
                 "title": "IAR: Build Project"
             }
         ],
-        "keybindings": [{
-            "command": "iar.build",
-            "key": "ctrl+shift+B",
-            "when": "!inDebugMode"
-        }]
+        "keybindings": [
+            {
+                "command": "iar.build",
+                "key": "ctrl+shift+B",
+                "when": "!inDebugMode && config.iar.enabled"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "IAR Configuration",
+            "properties": {
+                "iar.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable IAR extension."
+                }
+            }
+        }
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install"
