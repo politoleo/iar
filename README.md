@@ -31,4 +31,41 @@ Example `iar.json` configuration:
     "config": "Debug"
 }
 ```
+
+## Debug
+
+Example `launch.json` configuration for debug with J-Link:
+
+```javascript
+{
+    "version": "0.2.1",
+    "configurations": [
+      {
+        "name": "Debug J-Link",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "C:/Projects/TEST.out",
+        "stopAtEntry": true,
+        "cwd": "${workspaceRoot}",
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "arm-none-eabi-gdb.exe",
+        "debugServerPath": "JLinkGDBServerCL.exe",
+        "debugServerArgs": "-if swd -singlerun -strict -endian little -speed auto -port 3333 -device STM32FXXXXX -vd -strict -halt",
+        "serverStarted": "Connected\\ to\\ target",
+        "serverLaunchTimeout": 5000,
+        "filterStderr": false,
+        "filterStdout": true,
+        "setupCommands": [
+          {"text": "target remote localhost:3333"},
+          {"text": "monitor flash breakpoints = 1"},
+          {"text": "monitor flash download = 1"},
+          {"text": "monitor reset"},
+          {"text": "load C:/Projects/TEST.out"},
+          {"text": "monitor reset"}
+        ]
+      }
+    ]
+  }
+```
 [cpptools]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
