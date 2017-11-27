@@ -64,6 +64,8 @@ class Iar {
         }
 
         if (fs.existsSync(tmpfile)) {
+            def.push("_Pragma(x) ="),
+            def.push("__nounwind ="),
             def.push("__absolute =");
             def.push("__arm =");
             def.push("__big_endian =");
@@ -215,7 +217,12 @@ class Iar {
         iar.terminal.appendLine('Building configuration: ' + iar.config);
 
         var args = [iar.project.split("\\").join("\\\\"), iar.config, '-log', 'all'];
-        var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, { detached: true });
+        var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, { 
+            detached: true 
+            //stdio: [ 'ignore', 1, 2 ]
+        });
+        out.unref(); 
+
         var build_output = '';
 
         out.stdout.on('data', function (data) {
@@ -242,6 +249,8 @@ class Iar {
                 }
             }
 
+            iar.terminal.appendLine(' ');
+            iar.terminal.appendLine('Building database...');
             iar.build_database();
             iar.build_database_config();
             iar.terminal.appendLine(' ');
