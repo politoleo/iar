@@ -23,14 +23,14 @@ class Iar {
     }
 
     arg_replacer(match, p1) {
-        var newstring = '"' + p1 + '" -';
+        var newstring = ' "' + p1 + '" -';
         return newstring;
     }
 
     build_database_args(cmd) {
         cmd += " --predef_macros"
         var next = 1;
-        var arg_fixed = cmd.replace(/([a-zA-Z]:\\[\\\S|*\S].*?)\s-/gm, this.arg_replacer);
+        var arg_fixed = cmd.replace(/\s([a-zA-Z]:[\\\S|*\S].*?)\s-/gm, this.arg_replacer);
         var regex = /'.*?'|".*?"|\S+/g;
         var args = ['--IDE3', '--NCG'];
         var temp;
@@ -58,7 +58,7 @@ class Iar {
         args.push(tmpfile);
         var spw = ch.spawnSync(this.path + "arm\\bin\\iccarm.exe", args);
         var temp;
-        var inc_regex = new RegExp("^(\\$\\$TOOL_BEGIN\\s\\$\\$VERSION\\s\"3\"\\s\\$\\$INC_BEGIN\\s\\$\\$FILEPATH\\s\")(.*?)(\"\\s\\$\\$TOOL_END\\s)$", "gm");
+        var inc_regex = new RegExp("^(\\$\\$TOOL_BEGIN\\s\\$\\$VERSION\\s\".*\"\\s\\$\\$INC_BEGIN\\s\\$\\$FILEPATH\\s\")(.*?)(\"\\s\\$\\$TOOL_END\\s)$", "gm");
         var buf = spw.output.toString();
         while (temp = inc_regex.exec(buf)) {
             inc.push(temp[2].split("\\\\").join("\\"));
