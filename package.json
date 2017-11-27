@@ -1,8 +1,9 @@
 {
 	"name": "iar",
 	"displayName": "Iar",
+	"icon": "icon.png",
 	"description": "IAR Embedded Workbench integration",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "politoleo",
 	"engines": {
 		"vscode": "^1.18.0"
