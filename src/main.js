@@ -23,8 +23,10 @@ function activate(context) {
         if (fs.existsSync(config_file)) {
             var obj = JSON.parse(fs.readFileSync(config_file));
             if (obj["config"] && obj["path"] && obj["project"]) {
-                iar = new Iar(resolve(obj.path), resolve(obj.project), obj.config, folder);
-                iar.build();
+                if(!iar)
+                    iar = new Iar(resolve(obj.path), resolve(obj.project), obj.config, folder);
+                if(iar.in_progress() == false)
+                    iar.build();
             }
         }
         else {

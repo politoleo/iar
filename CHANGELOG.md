@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.2
+  - Fixed multiple instance.
+
 ## 1.1.1
   - Add debug example.
   

@@ -19,6 +19,7 @@ class Iar {
         this.includes = [];
         this.defines = [];
         this.browse = [];
+        this.progress = false;
         this.projectname = '';
     }
 
@@ -208,13 +209,27 @@ class Iar {
         }
     }
 
+    in_progress() {
+        return this.progress;
+    }
+
     build() {
 
         var iar = this;
 
-        this.parse_project();
+        iar.errors = -1;
+        iar.warnings = -1;
+        iar.problems = [];
+        iar.commands = [];
+        iar.includes = [];
+        iar.defines = [];
+        iar.browse = [];
+        iar.progress = true;
 
-        iar.terminal = vscode.window.createOutputChannel('IAR');
+        iar.parse_project();
+
+        if(!iar.terminal)
+            iar.terminal = vscode.window.createOutputChannel('IAR');
         iar.terminal.show();
 
         iar.terminal.appendLine('Building configuration: ' + iar.config);
@@ -273,6 +288,9 @@ class Iar {
             {
                 iar.terminal.appendLine('Something went wrong...');
             }
+
+            iar.terminal.appendLine(' ');
+            iar.progress = false;
         })
 
         out.on('error', function (data) {
