@@ -231,12 +231,14 @@ class Iar {
         if(!iar.terminal)
             iar.terminal = vscode.window.createOutputChannel('IAR');
         iar.terminal.show();
+		iar.terminal.clear();
+		vscode.workspace.saveAll(false);
 
         iar.terminal.appendLine('Building configuration: ' + iar.config);
         
         var task = os.cpus().length;
 
-        var args = [iar.project.split("\\").join("\\\\"), iar.config, '-log', 'all', '-parallel', task];
+        var args = [iar.project.split("\\").join("\\\\"), '-make', iar.config ,'-log', 'all', '-parallel', task];
         var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
             stdio: ['ignore', 'pipe', 'ignore']
         });
