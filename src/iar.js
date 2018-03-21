@@ -32,6 +32,7 @@ class Iar {
         cmd += " --predef_macros"
         var next = 1;
         var arg_fixed = cmd.replace(/\s([a-zA-Z]:[\\\S|*\S].*?)\s-/gm, this.arg_replacer);
+        arg_fixed = arg_fixed.replace(/(.*?)( -\S+)/, "\"$1\"$2") // Fix the lack of quotes on the first filename.
         var regex = /'.*?'|".*?"|\S+/g;
         var args = ['--IDE3', '--NCG'];
         var temp;
@@ -55,7 +56,7 @@ class Iar {
     build_database_single(cmd, inc, def) {
         var args = this.build_database_args(cmd);
         var defs;
-        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2]);
+        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2].replace("\"", ""));
         args.push(tmpfile);
         var spw = ch.spawnSync(this.path + "arm\\bin\\iccarm.exe", args);
         var temp;
