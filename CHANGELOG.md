@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0
+  - Allow for spaces in file path
+  - Clear terminal window and save all before build
+
 ## 1.1.2
   - Fixed multiple instance.
 
