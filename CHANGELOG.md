@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.3.0
+  - Reverse include path 
+  - Update dependencies
+
 ## 1.2.0
   - Allow for spaces in file path
   - Clear terminal window and save all before build

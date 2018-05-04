@@ -111,7 +111,7 @@ class Iar {
             for (var j = 0, inc_len = inc.length; j < inc_len; j++) {
                 var tmp = path.normalize(inc[j]);
                 if (this.includes.indexOf(tmp) < 0)
-                    this.includes.push(path.normalize(tmp));
+                    this.includes.unshift(path.normalize(tmp));
             }
             for (var j = 0, def_len = def.length; j < def_len; j++) {
                 if (this.defines.indexOf(def[j]) < 0)

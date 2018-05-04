@@ -3,7 +3,7 @@
 	"displayName": "IAR Embedded Workbench",
 	"icon": "icon.png",
 	"description": "Provide Intellisense and Build support for IAR Embedded Workbench IDE",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"publisher": "politoleo",
 	"engines": {
 		"vscode": "^1.18.0"
