@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.0
+  - Update README to be more user friendly
+  - Add compilerPath to null to avoid wrong include files
+
 ## 1.3.0
   - Reverse include path 
   - Update dependencies

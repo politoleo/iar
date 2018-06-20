@@ -178,6 +178,7 @@ class Iar {
             var iar_config = {
                 name: "IAR",
                 intelliSenseMode: "clang-x64",
+                compilerPath:"",
                 browse: browse_config,
                 includePath: this.includes,
                 defines: this.defines
