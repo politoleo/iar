@@ -154,7 +154,7 @@ class Iar {
         }
 
         //Check compile commands:
-        var icc_regex = new RegExp("^iccarm.exe (.*\\.c) (.*)$", "gm");
+        var icc_regex = new RegExp("^iccarm.exe (.*\\.c|.*\\.cpp) (.*)$", "gm");
         while (temp = icc_regex.exec(build_output)) {
             this.commands.push(temp);
         }
@@ -253,7 +253,7 @@ class Iar {
             while (temp = asm_regex.exec(buffer)) {
                 iar.terminal.appendLine(path.basename(temp[1]));
             }
-            var icc_regex = new RegExp("^iccarm.exe (.*\\.c) (.*)$", "gmi");
+            var icc_regex = new RegExp("^iccarm.exe (.*\\.c|.*\\.cpp) (.*)$", "gmi");
             while (temp = icc_regex.exec(buffer)) {
                 iar.terminal.appendLine(path.basename(temp[1]));
             }
