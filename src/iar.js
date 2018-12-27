@@ -80,7 +80,7 @@ class Iar {
             def.push("__little_endian =");
             def.push("__nested =");
             def.push("__no_init =");
-            def.push("__noretrun =");
+            def.push("__noreturn =");
             def.push("__packed =");
             def.push("__pcrel =");
             def.push("__ramfunc =");
