@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.6.0
+  - Add iar.json file saved event 
+  
+ ## 1.5.0
+  - cpp support
+  - parallel flag
+  
 ## 1.4.0
   - Update README to be more user friendly
   - Add compilerPath to null to avoid wrong include files
