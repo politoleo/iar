@@ -23,16 +23,10 @@ class Iar {
         this.projectname = '';
     }
 
-    arg_replacer(match, p1) {
-        var newstring = ' "' + p1 + '" -';
-        return newstring;
-    }
-
     build_database_args(cmd) {
         cmd += " --predef_macros"
         var next = 1;
-        var arg_fixed = cmd.replace(/\s([a-zA-Z]:[\\\S|*\S].*?)\s-/gm, this.arg_replacer);
-        arg_fixed = arg_fixed.replace(/(.*?)( -\S+)/, "\"$1\"$2") // Fix the lack of quotes on the first filename.
+        var arg_fixed = cmd.replace(/([a-zA-Z]:\\.*?)( -\S|$)/gm, "\"$1\"$2");
         var regex = /'.*?'|".*?"|\S+/g;
         var args = ['--IDE3', '--NCG'];
         var temp;
