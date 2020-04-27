@@ -56,7 +56,7 @@ class Iar {
     build_database_single(cmd, inc, def) {
         var args = this.build_database_args(cmd);
         var defs;
-        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2].replace("\"", ""));
+        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2].replace("\"", "")) + ".tmp";
         args.push(tmpfile);
         var spw = ch.spawnSync(this.path + "arm\\bin\\iccarm.exe", args);
         var temp;
@@ -103,11 +103,14 @@ class Iar {
 
     build_database() {
         var i = 0;
-        for (var i = 0, icc_len = this.commands.length; i < icc_len; i++) {
+        if (this.commands.length > 0) {
             var inc = [];
             var def = [];
-            var command = this.commands[i][1] + " " + this.commands[i][2]
+            var tmpfile = os.tmpdir() + "\\temp1234.c";
+            fs.writeFileSync(tmpfile, "#include <stdio.h>\nint main(void) {return 0}\n");
+            var command = tmpfile + " " + this.commands[i][2]
             this.build_database_single(command, inc, def);
+            fs.unlinkSync(tmpfile);
             for (var j = 0, inc_len = inc.length; j < inc_len; j++) {
                 var tmp = path.normalize(inc[j]);
                 if (this.includes.indexOf(tmp) < 0)
