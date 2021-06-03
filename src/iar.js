@@ -23,17 +23,13 @@ class Iar {
         this.projectname = '';
     }
 
-    arg_replacer(match, p1) {
-        var newstring = ' "' + p1 + '" -';
-        return newstring;
-    }
 
     build_database_args(cmd) {
         cmd += " --predef_macros"
         var next = 1;
-        var arg_fixed = cmd.replace(/\s([a-zA-Z]:[\\\S|*\S].*?)\s-/gm, this.arg_replacer);
-        arg_fixed = arg_fixed.replace(/(.*?)( -\S+)/, "\"$1\"$2") // Fix the lack of quotes on the first filename.
-        var regex = /'.*?'|".*?"|\S+/g;
+        cmd = cmd.replace(/\"/g, '');
+        var arg_fixed = cmd.replace(/([a-zA-Z]:\\.*?)( -\S|$)/gm, "\"$1\"$2");
+        var regex = /".*?"|'.*?'|\S+/g;
         var args = ['--IDE3', '--NCG'];
         var temp;
         while (temp = regex.exec(arg_fixed)) {
@@ -56,7 +52,7 @@ class Iar {
     build_database_single(cmd, inc, def) {
         var args = this.build_database_args(cmd);
         var defs;
-        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2].replace("\"", ""));
+        var tmpfile = os.tmpdir() + "\\" + path.basename(args[2].replace("\"", "")) + ".tmp";
         args.push(tmpfile);
         var spw = ch.spawnSync(this.path + "arm\\bin\\iccarm.exe", args);
         var temp;
@@ -103,11 +99,15 @@ class Iar {
 
     build_database() {
         var i = 0;
-        for (var i = 0, icc_len = this.commands.length; i < icc_len; i++) {
+        if (this.commands.length > 0) {
+
             var inc = [];
             var def = [];
-            var command = this.commands[i][1] + " " + this.commands[i][2]
+            var tmpfile = os.tmpdir() + "\\temp1234.c";
+            fs.writeFileSync(tmpfile, "#include <stdio.h>\nint main(void) {return 0}\n");
+            var command = tmpfile + " " + this.commands[i][this.commands[i].length - 1]
             this.build_database_single(command, inc, def);
+            fs.unlinkSync(tmpfile);
             for (var j = 0, inc_len = inc.length; j < inc_len; j++) {
                 var tmp = path.normalize(inc[j]);
                 if (this.includes.indexOf(tmp) < 0)
@@ -154,7 +154,7 @@ class Iar {
         }
 
         //Check compile commands:
-        var icc_regex = new RegExp("^iccarm.exe (.*\\.c|.*\\.cpp) (.*)$", "gm");
+        var icc_regex = new RegExp('(^.*iccarm.exe|^.*iccarm.exe") (.*\\.cpp("|)|.*\\.c("|)) (.*)$', "gm");
         while (temp = icc_regex.exec(build_output)) {
             this.commands.push(temp);
         }
@@ -178,7 +178,7 @@ class Iar {
             var iar_config = {
                 name: "IAR",
                 intelliSenseMode: "clang-x64",
-                compilerPath:"",
+                compilerPath: "",
                 browse: browse_config,
                 includePath: this.includes,
                 defines: this.defines
@@ -230,17 +230,17 @@ class Iar {
 
         iar.parse_project();
 
-        if(!iar.terminal)
+        if (!iar.terminal)
             iar.terminal = vscode.window.createOutputChannel('IAR');
         iar.terminal.show();
-		iar.terminal.clear();
-		vscode.workspace.saveAll(false);
+        iar.terminal.clear();
+        vscode.workspace.saveAll(false);
 
         iar.terminal.appendLine('Building configuration: ' + iar.config);
-        
+
         var task = os.cpus().length;
 
-        var args = [iar.project.split("\\").join("\\\\"), '-make', iar.config ,'-log', 'all', '-parallel', task];
+        var args = [iar.project.split("\\").join("\\\\"), '-make', iar.config, '-log', 'all', '-parallel', task];
         var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
             stdio: ['ignore', 'pipe', 'ignore']
         });
@@ -248,21 +248,14 @@ class Iar {
         var build_output = '';
         out.stdout.on('data', function (data) {
             var buffer = data;
-            var temp;
-            var asm_regex = new RegExp("^iasmarm.exe (.*\\.s) (.*)$", "gmi");
-            while (temp = asm_regex.exec(buffer)) {
-                iar.terminal.appendLine(path.basename(temp[1]));
-            }
-            var icc_regex = new RegExp("^iccarm.exe (.*\\.c|.*\\.cpp) (.*)$", "gmi");
-            while (temp = icc_regex.exec(buffer)) {
-                iar.terminal.appendLine(path.basename(temp[1]));
-            }
-            var link_regex = new RegExp("^ilinkarm.exe.*\\.o.*$", "gmi");
-            if (temp = link_regex.exec(buffer)) {
-                iar.terminal.appendLine(' ');
-                iar.terminal.appendLine("Linking...");
-            }
+            var buf2 = String(buffer);
             build_output += buffer;
+
+            buf2 = buf2.replace(new RegExp('^\n$', 'gm'), "");
+            buf2 = buf2.replace(new RegExp('(^.*iasmarm.exe|^.*iasmarm.exe") (.*)$', "gmi"), "")
+            buf2 = buf2.replace(new RegExp('(^.*iccarm.exe|^.*iccarm.exe") (.*)$', "gmi"), "")
+            buf2 = buf2.replace(new RegExp('(^.*ilinkarm.exe|^.*ilinkarm.exe") (.*)$', "gmi"), "Linking...")
+            iar.terminal.appendLine(buf2);
         });
 
         out.on('close', function (code) {
@@ -284,12 +277,10 @@ class Iar {
                     iar.build_database_config();
                     iar.terminal.appendLine(' ');
 
-                    iar.terminal.appendLine('Errors: ' + iar.errors);
-                    iar.terminal.appendLine('Warning: ' + iar.warnings);
+                    iar.terminal.appendLine("Done");
                 }
             }
-            else
-            {
+            else {
                 iar.terminal.appendLine('Something went wrong...');
             }
 
