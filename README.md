@@ -90,6 +90,7 @@ Example `launch.json` configuration for debug with J-Link:
 ```
 
 Example `launch.json` configuration for debug with st-util:
+
 Get st-util here: https://github.com/stlink-org/stlink
 
 ```javascript
