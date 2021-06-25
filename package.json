@@ -3,7 +3,7 @@
 	"displayName": "IAR Embedded Workbench",
 	"icon": "icon.png",
 	"description": "Provide Intellisense and Build support for IAR Embedded Workbench IDE",
-	"version": "1.7.1",
+	"version": "1.8.0",
 	"publisher": "ChristofferRingtved",
 	"engines": {
 		"vscode": "^1.18.0"
@@ -12,7 +12,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:iar.build"
+		"onCommand:iar.picker"
 	],
 	"repository": {
 		"type": "git",
@@ -22,13 +22,13 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "iar.build",
-				"title": "IAR: Build Project"
+				"command": "iar.picker",
+				"title": "IAR: Choose Action"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "iar.build",
+				"command": "iar.picker",
 				"key": "ctrl+shift+B",
 				"when": "!inDebugMode && config.iar.enabled"
 			}

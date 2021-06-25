@@ -215,7 +215,76 @@ class Iar {
         return this.progress;
     }
 
-    build() {
+    pickerItems = ["IAR: Build", "IAR: Clean", "IAR: Rebuild"];
+
+    picker(pickerEnable) {
+        if (!pickerEnable["iarPicker.enabled"]) {
+            this.build()
+        }
+        else {
+            vscode.window.showQuickPick(this.pickerItems).then(value => {
+                switch (value) {
+                    case "IAR: Build":
+                        {
+                            this.build(false)
+                            break
+                        }
+                    case "IAR: Clean":
+                        {
+                            this.clean()
+                            break
+                        }
+                    case "IAR: Rebuild":
+                        {
+                            this.build(false)
+                            break
+                        }
+                    default:
+                        {
+                            break
+                        }
+                }
+            })
+        }
+    }
+    clean() {
+        iar.progress = true;
+
+        iar.parse_project();
+
+        if (!iar.terminal)
+            iar.terminal = vscode.window.createOutputChannel('IAR');
+        iar.terminal.show();
+        iar.terminal.clear();
+        vscode.workspace.saveAll(false);
+
+        iar.terminal.appendLine('Building configuration: ' + iar.config);
+
+        var task = os.cpus().length;
+
+        var args = [iar.project.split("\\").join("\\\\"), '-clean', iar.config];
+        var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
+            stdio: ['ignore', 'pipe', 'ignore']
+        });
+
+        out.stdout.on('data', function (data) {
+            iar.terminal.appendLine(data);
+        })
+
+        out.on('close', function () {
+            iar.progress = false
+        })
+        out.on('error', function () {
+            iar.terminal.appendLine('Error while starting IarBuild.exe. Open it with IAR Ide to fix it.')
+        })
+    }
+
+    build(rebuild) {
+        var buildParameter = "-make"
+        if (rebuild) {
+            buildParameter = "-build"
+        }
+
 
         var iar = this;
 
@@ -240,7 +309,7 @@ class Iar {
 
         var task = os.cpus().length;
 
-        var args = [iar.project.split("\\").join("\\\\"), '-make', iar.config, '-log', 'all', '-parallel', task];
+        var args = [iar.project.split("\\").join("\\\\"), buildParameter, iar.config, '-log', 'all', '-parallel', task];
         var out = ch.spawn(iar.path + "common\\bin\\IarBuild.exe", args, {
             stdio: ['ignore', 'pipe', 'ignore']
         });
@@ -291,7 +360,10 @@ class Iar {
         out.on('error', function (data) {
             iar.terminal.appendLine('Error while starting IarBuild.exe. Open it with IAR Ide to fix it.');
         })
+
+
     }
+
 }
 
 module.exports = Iar;

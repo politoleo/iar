@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.8.0
+  - Added action picker
+
 ## 1.7.1
   - Added compatibility for IAR 9.0
 

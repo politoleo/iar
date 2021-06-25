@@ -5,6 +5,10 @@ As IAR works on Windows environment only, the extension is not been tested on di
 
 This is NOT an official IAR Systems extension.
 
+## THIS IS A FORK
+The original project can be found here:
+https://github.com/politoleo/iar
+
 ## Getting Started:
 
 ### 1) Create `iar.json` file inside `.vscode` folder:
@@ -29,6 +33,20 @@ Example `iar.json` configuration, customize it according to your setup:
 
 The extension automatically replaces your `c_cpp_properties.json` [Microsoft C++ Tools][cpptools] configuration to matches the IAR Project ones.
 It supports browsing to external files, includepath, common defines and user included one.
+
+### 4) Run `ctrl+shift+b` to pick action.
+
+There are 3 different actions to choose between.
+IAR: Build
+IAR: Clean
+IAR: Rebuild
+
+Add the following in `iar.json` inside the `.vscode` folder to enable action picker:
+```javascript
+{
+    "iarPicker.enabled": true
+}
+```
 
 
 ## Debug
@@ -69,12 +87,12 @@ Example `launch.json` configuration for debug with J-Link:
 ```
 
 Example `launch.json` configuration for debug with st-util:
+Get st-util here: https://github.com/stlink-org/stlink
 
 ```javascript
 {
     "version": "0.2.0",
     "configurations": [
-        // * C GDB
         {
             "type": "cortex-debug",
             "request": "launch",
