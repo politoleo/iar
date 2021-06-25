@@ -37,8 +37,11 @@ It supports browsing to external files, includepath, common defines and user inc
 ### 4) Run `ctrl+shift+b` to pick action.
 
 There are 3 different actions to choose between.
+
 IAR: Build
+
 IAR: Clean
+
 IAR: Rebuild
 
 Add the following in `iar.json` inside the `.vscode` folder to enable action picker:
