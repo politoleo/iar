@@ -12,7 +12,7 @@ Example `iar.json` configuration, customize it according to your setup:
 ```javascript
 {
     "version": 1,
-    "path": "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.0\\",
+    "path": "C:\\Program Files\\IAR Systems\\Embedded Workbench 9.0\\",
     "project": "C:\\Projects\\TEST\\TEST.ewp",
     "config": "Debug"
 }
@@ -66,5 +66,32 @@ Example `launch.json` configuration for debug with J-Link:
       }
     ]
   }
+```
+
+Example `launch.json` configuration for debug with st-util:
+
+```javascript
+{
+    "version": "0.2.0",
+    "configurations": [
+        // * C GDB
+        {
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "stutil",
+            "cwd": "${workspaceRoot}",
+            "executable": "C:/Projects/TEST.out",
+            "svdFile": "C:/ST/STM32H743.svd",
+            "name": "Debug (ST-Util)",
+            "device": "${config:project.mcu}",
+            "runToMain": true,
+            "v1": false,
+            "serverpath": "C:/stlink/bin/st-util.exe",
+            "serverArgs": [
+                "--freq=4000k"
+            ]
+        }
+    ]
+}
 ```
 [cpptools]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
