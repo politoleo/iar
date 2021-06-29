@@ -100,7 +100,7 @@ https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads
 https://github.com/texane/stlink
 
 #### 4. add `launch.json` to `.vscode` in project folder
-svdFile can be found in IAR directory or downloaded from ST' website
+svdFile can be found in IAR directory or downloaded from ST's website
 
 The executable is found in the project directory
 
