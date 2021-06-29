@@ -19,23 +19,21 @@ function activate(context) {
     folder = vscode.workspace.rootPath;
     config_file = folder + "\\.vscode\\iar.json";
 
-    vscode.workspace.onDidSaveTextDocument((e) => 
-    {
-        if(config_file === e.fileName)
-        {
-            if (!(typeof iar === 'undefined' || iar === null)) 
+    vscode.workspace.onDidSaveTextDocument((e) => {
+        if (config_file === e.fileName) {
+            if (!(typeof iar === 'undefined' || iar === null))
                 delete iar
         }
     })
 
-    let disposable = vscode.commands.registerCommand('iar.build', function () {
+    let disposable = vscode.commands.registerCommand('iar.picker', function () {
         if (fs.existsSync(config_file)) {
             var obj = JSON.parse(fs.readFileSync(config_file));
             if (obj["config"] && obj["path"] && obj["project"]) {
-                if (typeof iar === 'undefined' || iar === null) 
+                if (typeof iar === 'undefined' || iar === null)
                     iar = new Iar(resolve(obj.path), resolve(obj.project), obj.config, folder);
-                if(iar.in_progress() == false)
-                    iar.build();
+                if (iar.in_progress() == false)
+                    iar.picker(obj);
             }
         }
         else {

@@ -3,8 +3,8 @@
 	"displayName": "IAR Embedded Workbench",
 	"icon": "icon.png",
 	"description": "Provide Intellisense and Build support for IAR Embedded Workbench IDE",
-	"version": "1.6.0",
-	"publisher": "politoleo",
+	"version": "1.8.1",
+	"publisher": "ChristofferRingtved",
 	"engines": {
 		"vscode": "^1.18.0"
 	},
@@ -12,23 +12,23 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:iar.build"
+		"onCommand:iar.picker"
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/politoleo/iar.git"
+		"url": "https://github.com/HelligeChris/iar.git"
 	},
 	"main": "./src/main",
 	"contributes": {
 		"commands": [
 			{
-				"command": "iar.build",
-				"title": "IAR: Build Project"
+				"command": "iar.picker",
+				"title": "IAR: Choose Action"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "iar.build",
+				"command": "iar.picker",
 				"key": "ctrl+shift+B",
 				"when": "!inDebugMode && config.iar.enabled"
 			}
@@ -57,7 +57,7 @@
 	},
 	"__metadata": {
 		"id": "8e4967c3-c5a3-4f54-adf9-83f7daaff7db",
-		"publisherDisplayName": "Leonardo Polito",
+		"publisherDisplayName": "Christoffer Ringtved",
 		"publisherId": "ae8a33b2-c6ae-4f52-9d5e-110b0065517e"
 	}
 }

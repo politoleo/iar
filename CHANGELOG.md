@@ -1,9 +1,18 @@
 # Change Log
 
+## 1.8.1
+  - Added small debugger setup guide
+
+## 1.8.0
+  - Added action picker
+
+## 1.7.1
+  - Added compatibility for IAR 9.0
+
 ## 1.6.0
   - Add iar.json file saved event 
   
- ## 1.5.0
+## 1.5.0
   - cpp support
   - parallel flag
   

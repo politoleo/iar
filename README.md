@@ -5,6 +5,11 @@ As IAR works on Windows environment only, the extension is not been tested on di
 
 This is NOT an official IAR Systems extension.
 
+## THIS IS A FORK
+The original project can be found here:
+
+https://github.com/politoleo/iar
+
 ## Getting Started:
 
 ### 1) Create `iar.json` file inside `.vscode` folder:
@@ -12,7 +17,7 @@ Example `iar.json` configuration, customize it according to your setup:
 ```javascript
 {
     "version": 1,
-    "path": "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.0\\",
+    "path": "C:\\Program Files\\IAR Systems\\Embedded Workbench 9.0\\",
     "project": "C:\\Projects\\TEST\\TEST.ewp",
     "config": "Debug"
 }
@@ -26,15 +31,30 @@ Example `iar.json` configuration, customize it according to your setup:
 ```
 
 ### 3) Run `ctrl+shift+b` to start build.
-
 The extension automatically replaces your `c_cpp_properties.json` [Microsoft C++ Tools][cpptools] configuration to matches the IAR Project ones.
+
 It supports browsing to external files, includepath, common defines and user included one.
+
+### 4) Run `ctrl+shift+b` to pick action.
+There are 3 different actions to choose between.
+
+IAR: Build
+
+IAR: Clean
+
+IAR: Rebuild
+
+Add the following in `iar.json` inside the `.vscode` folder to enable action picker:
+```javascript
+{
+    "iarPicker.enabled": true
+}
+```
 
 
 ## Debug
 
-Example `launch.json` configuration for debug with J-Link:
-
+### Example `launch.json` configuration for debug with J-Link:
 ```javascript
 {
     "version": "0.2.1",
@@ -66,5 +86,45 @@ Example `launch.json` configuration for debug with J-Link:
       }
     ]
   }
+```
+
+### Example `launch.json` configuration for debug with st-util:
+
+#### 1. Install vs code extension `Cortex-Debug`
+https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug
+
+#### 2. Install ARM GCC Toolchain
+https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads
+
+#### 3. Install Texae's `st-util` GDB server
+https://github.com/texane/stlink
+
+#### 4. add `launch.json` to `.vscode` in project folder
+svdFile can be found in IAR directory or downloaded from ST's website
+
+The executable is found in the project directory
+
+```javascript
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "stutil",
+            "cwd": "${workspaceRoot}",
+            "executable": "C:/Projects/TEST.out",
+            "svdFile": "C:/ST/STM32H743.svd",
+            "name": "Debug (ST-Util)",
+            "device": "STM32H743ZL2",
+            "runToMain": true,
+            "v1": false,
+            "serverpath": "C:/stlink/bin/st-util.exe",
+            "serverArgs": [
+                "--freq=4000k"
+            ]
+        }
+    ]
+}
 ```
 [cpptools]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
