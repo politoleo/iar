@@ -90,7 +90,7 @@ Add the following in `iar.json` inside the `.vscode` folder to enable action pic
 
 ### Example `launch.json` configuration for debug with st-util:
 
-#### 1. Install vs code extension` Cortex-Debug`
+#### 1. Install vs code extension `Cortex-Debug`
 https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug
 
 #### 2. Install ARM GCC Toolchain
