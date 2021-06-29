@@ -7,6 +7,7 @@ This is NOT an official IAR Systems extension.
 
 ## THIS IS A FORK
 The original project can be found here:
+
 https://github.com/politoleo/iar
 
 ## Getting Started:
@@ -30,15 +31,17 @@ Example `iar.json` configuration, customize it according to your setup:
 ```
 
 ### 3) Run `ctrl+shift+b` to start build.
-
 The extension automatically replaces your `c_cpp_properties.json` [Microsoft C++ Tools][cpptools] configuration to matches the IAR Project ones.
+
 It supports browsing to external files, includepath, common defines and user included one.
 
 ### 4) Run `ctrl+shift+b` to pick action.
-
 There are 3 different actions to choose between.
+
 IAR: Build
+
 IAR: Clean
+
 IAR: Rebuild
 
 Add the following in `iar.json` inside the `.vscode` folder to enable action picker:
@@ -51,8 +54,7 @@ Add the following in `iar.json` inside the `.vscode` folder to enable action pic
 
 ## Debug
 
-Example `launch.json` configuration for debug with J-Link:
-
+### Example `launch.json` configuration for debug with J-Link:
 ```javascript
 {
     "version": "0.2.1",
@@ -86,8 +88,22 @@ Example `launch.json` configuration for debug with J-Link:
   }
 ```
 
-Example `launch.json` configuration for debug with st-util:
-Get st-util here: https://github.com/stlink-org/stlink
+### Example `launch.json` configuration for debug with st-util:
+STM32 st-link debugger for vscode
+
+#### 1. Install vs code extension` Cortex-Debug`
+https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug
+
+#### 2. Install ARM GCC Toolchain
+https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads
+
+#### 3. Install Texae's `st-util` GDB server
+https://github.com/texane/stlink
+
+#### 4. add `launch.json` to `.vscode` in project folder
+svdFile can be found in IAR directory or downloaded from ST' website
+
+The executable is found in the project directory
 
 ```javascript
 {
@@ -101,7 +117,7 @@ Get st-util here: https://github.com/stlink-org/stlink
             "executable": "C:/Projects/TEST.out",
             "svdFile": "C:/ST/STM32H743.svd",
             "name": "Debug (ST-Util)",
-            "device": "${config:project.mcu}",
+            "device": "STM32H743ZL2",
             "runToMain": true,
             "v1": false,
             "serverpath": "C:/stlink/bin/st-util.exe",

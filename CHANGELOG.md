@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.8.1
+  - Added small debugger setup guide
+
 ## 1.8.0
   - Added action picker
 
